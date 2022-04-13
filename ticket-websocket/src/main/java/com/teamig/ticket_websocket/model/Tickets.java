@@ -10,5 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Tickets {
-    private int ticketArray[] = {};
+    private String ticketArray[] = {};
 }
