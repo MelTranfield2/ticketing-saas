@@ -3,7 +3,7 @@ package com.teamig.ticket_websocket.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.teamig.ticket_websocket.model.Message;
+import com.teamig.ticket_websocket.model.Tickets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,14 +20,14 @@ public class TicketController {
 
     @MessageMapping("/message")
     @SendTo("/database/public")
-    private Message receivePublicMessage(@Payload Message message) {
-        return message;
+    private Tickets receivePublicMessage(@Payload Tickets tickets) {
+        return tickets;
     }
 
     @MessageMapping("private-message")
-    private Message receivePrivateMessage(@Payload Message message) {
-
-        simpMessagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message);
-        return message;
+    private Tickets receivePrivateMessage(@Payload Tickets tickets) {
+        simpMessagingTemplate.convertAndSendToUser(tickets.getTicketArray(), "/private", tickets);
+        System.out.println(tickets.toString());
+        return tickets;
     }
 }
