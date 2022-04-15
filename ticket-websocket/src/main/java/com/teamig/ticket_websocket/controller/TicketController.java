@@ -19,15 +19,17 @@ public class TicketController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/message")
-    @SendTo("/database/public")
-    private Tickets receivePublicMessage(@Payload Tickets tickets) {
-        return tickets;
-    }
-
-    @MessageMapping("private-message")
-    private Tickets receivePrivateMessage(@Payload Tickets tickets) {
-        simpMessagingTemplate.convertAndSendToUser(tickets.getTicketArray(), "/private", tickets);
-        System.out.println(tickets.toString());
-        return tickets;
+    @SendTo("/database/ticketarray")
+    private Tickets randomTicket(@Payload Tickets tickets) {
+        ArrayList<String> tickArray = new ArrayList<String>();
+        ArrayList<String> removeArray = new ArrayList<String>()
+        for(int i = 1; i < 101; i++) {
+            tickArray.add("a"+i)
+        }
+        for(int i = 0; i < 5; i++){
+            String randStr = getRandomElement(tickArray)
+            removeArray.add(randStr)
+        }
+        return removeArray;
     }
 }
