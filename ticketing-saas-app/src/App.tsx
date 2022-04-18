@@ -23,4 +23,19 @@ function App() {
   );
 }
 
+// function GridSeatingLayout({ seats }) {
+//   // get unique list of rows and seats in rows
+//   const rows = new Set(seats.map({ row } => row)).toArray().sort();
+//   const rowSeats = new Set(seats.map({ rowSeat } => rowSeat)).toArray().sort();
+
+//   return (
+//     <div>
+//       {rows.map((rrow) => (
+//         <div>
+//           {rowSeats.map((rrowSeat) => {
+//              const seat = seats.find(({ row, rowSeat } => row === rrow && rowSeat === rrowSeat);
+//              return (<Seat seat={seat} />);
+//     </div>
+//   );
+
 export default App;
