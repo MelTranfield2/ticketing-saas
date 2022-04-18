@@ -2,6 +2,8 @@ package com.teamig.ticket_websocket.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.ArrayList;
 
 import com.teamig.ticket_websocket.model.Tickets;
 
@@ -20,15 +22,16 @@ public class TicketController {
 
     @MessageMapping("/message")
     @SendTo("/database/ticketarray")
-    private Tickets randomTicket(@Payload Tickets tickets) {
+    private ArrayList<String> randomTicket(@Payload Tickets tickets) {
         ArrayList<String> tickArray = new ArrayList<String>();
-        ArrayList<String> removeArray = new ArrayList<String>()
-        for(int i = 1; i < 101; i++) {
-            tickArray.add("a"+i)
+        ArrayList<String> removeArray = new ArrayList<String>();
+        for (int i = 1; i < 101; i++) {
+            tickArray.add("a" + i);
         }
-        for(int i = 0; i < 5; i++){
-            String randStr = getRandomElement(tickArray)
-            removeArray.add(randStr)
+        Random random_seat = new Random();
+        for (int i = 0; i < 5; i++) {
+            int index = random_seat.nextInt(tickArray.size());
+            removeArray.add(tickArray.get(index));
         }
         return removeArray;
     }
