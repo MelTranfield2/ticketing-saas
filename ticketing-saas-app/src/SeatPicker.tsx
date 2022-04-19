@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useState } from "react";
 import Seat from "./Seat";
+import { Ticket } from "./App";
 
 const Container = styled.div`
   background: #c5e7f3;
@@ -9,52 +9,32 @@ const Container = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: 120px repeat(5, 80px);
+  grid-gap: 20px;
+  grid-template-columns: 80px repeat(4, 80px);
+  grid-template-rows: 80px repeat(5, 80px);
 `;
 
-type SeatPickerProps = {
-  seatNumber: string;
+export type SeatPickerProps = {
+  tickets: Ticket[];
 };
 
-// const seats: number = 20;
-
-// function GridSeatingLayout({ seats }) {
-// get unique list of rows and seats in rows
-//   const rows = new Set(seats.map({ row } => row)).toArray().sort();
-//   const rowSeats = new Set(seats.map({ rowSeat } => rowSeat)).toArray().sort();
-
-//   return (
-//     <div>
-//       {rows.map((rrow) => (
-//         <div>
-//           {rowSeats.map((rrowSeat) => {
-//              const seat = seats.find(({ row, rowSeat } => row === rrow && rowSeat === rrowSeat);
-//              return (<Seat seat={seat} />);
-//     </div>
-//   );
-// }
-
-const SeatPicker: React.FC<SeatPickerProps> = ({ seatNumber }) => {
-  const rows = 5;
-  const columns = 4;
+const SeatPicker: React.FC<SeatPickerProps> = ({ tickets }) => {
   return (
-    <Container>
-      <Grid>
-        {Array.from({ length: rows }, (v, row) =>
-          Array.from({ length: columns }, (v, column) => (
+    <Grid>
+      {tickets.map((ticket: Ticket) => {
+        return (
+          <Container>
             <Seat
-              label={"A" + (row * columns + column + 1)}
-              position={[column, row + 1]}
-              //   onClick={}
-              data-testid={"seat" + (row * columns + column + 1)}
-              key={"seat" + (row * columns + column + 1)}
-            />
-          ))
-        )}
-      </Grid>
-    </Container>
+              key={ticket.name}
+              label={ticket.name}
+              width={10}
+              height={10}
+              isAvailable={ticket.available}
+            ></Seat>
+          </Container>
+        );
+      })}
+    </Grid>
   );
 };
 

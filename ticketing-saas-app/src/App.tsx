@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import SeatPicker from "./SeatPicker";
 import styled from "styled-components";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 const Container = styled.div`
   align-items: center;
@@ -13,29 +15,40 @@ const Container = styled.div`
   width: 100vw;
 `;
 
+export type Ticket = {
+  name: string;
+  available: boolean;
+};
+
 function App() {
+  const [tickets, setTickets] = useState([]);
+
+  const sock = new SockJS("http://localhost:8080/stomp");
+  const stompClient = Stomp.over(sock);
+
+  const onConnected = () => {
+    console.log("connected");
+    stompClient.subscribe("/allSeats", onMessageReceived);
+    stompClient.send("/startTimer", {}, "{}");
+  };
+
+  const onMessageReceived = (payload: { body: string }) => {
+    setTickets(JSON.parse(payload.body));
+  };
+
+  const onError = (err: any) => {
+    console.error(err);
+  };
+
+  stompClient.connect({}, onConnected, onError);
+
   return (
     <div className="App">
       <Container>
-        <SeatPicker seatNumber={"5"}></SeatPicker>
+        <SeatPicker tickets={tickets}></SeatPicker>
       </Container>
     </div>
   );
 }
-
-// function GridSeatingLayout({ seats }) {
-//   // get unique list of rows and seats in rows
-//   const rows = new Set(seats.map({ row } => row)).toArray().sort();
-//   const rowSeats = new Set(seats.map({ rowSeat } => rowSeat)).toArray().sort();
-
-//   return (
-//     <div>
-//       {rows.map((rrow) => (
-//         <div>
-//           {rowSeats.map((rrowSeat) => {
-//              const seat = seats.find(({ row, rowSeat } => row === rrow && rowSeat === rrowSeat);
-//              return (<Seat seat={seat} />);
-//     </div>
-//   );
 
 export default App;
