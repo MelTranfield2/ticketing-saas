@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js"></script>
+    <script>
+      const onConnected = () => {
+        console.log("connected");
+        stompClient.subscribe("/allSeats", onMessageReceived);
+        stompClient.send("/startTimer", {}, "{}");
+      };
+
+      const onMessageReceived = (payload) => {
+        console.log("on message");
+        var payloadData = JSON.parse(payload.body);
+        console.log(payloadData);
+      };
+
+      const onError = (err) => {
+        console.log(err);
+      };
+
+      var sock = new SockJS("http://localhost:8080/stomp");
+      var stompClient = StompJs.Stomp.over(sock);
+      stompClient.connect({}, onConnected, onError);
+    </script>
+  </head>
+  <body>
+    check console
+  </body>
+</html>
